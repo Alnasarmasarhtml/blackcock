@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>BLACKCOCK · market maker for solana coins</title>
+  <meta name="description" content="rent a market maker for your solana coin. your creator fees go in, it buys the dips and sells the tops. 1 sol per coin, 10% of profit burns $BLACKCOCK." />
+  <meta name="theme-color" content="#050505" />
+  <link rel="icon" href="./art/mark-64.png" />
+  <link rel="apple-touch-icon" href="./art/icon-180.png" />
+  <meta property="og:title" content="BLACKCOCK" />
+  <meta property="og:description" content="market maker for your solana coin. buys the dips, sells the tops." />
+  <meta property="og:image" content="https://alnasarmasarhtml.github.io/blackcock/art/og.jpg" />
+  <meta name="twitter:image" content="https://alnasarmasarhtml.github.io/blackcock/art/og.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <script type="module" crossorigin src="./assets/index-IncmkyKY.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/config-DjUNr4bY.js">
+  <link rel="stylesheet" crossorigin href="./assets/config-hJORx516.css">
+</head>
+<body>
+  <!-- loader: a laser line draws, the eyes light, the page opens -->
+  <div class="loader" id="loader">
+    <div class="loader__line"><i id="loaderBar"></i></div>
+    <div class="loader__meta"><span class="eyebrow">waking the bird</span><span class="mono" id="loaderNum">00</span></div>
+  </div>
+
+  <canvas id="gl" class="gl" aria-hidden="true"></canvas>
+  <div class="laser-wipe" id="wipe" aria-hidden="true"><i></i></div>
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="top" id="top">
+    <a class="brand" href="#hero"><img src="./art/mark-128.png" alt="" /><b>BLACK<em>COCK</em></b></a>
+    <span class="top__div" aria-hidden="true"></span>
+    <nav class="nav" id="nav">
+      <a href="#chart">How it trades</a>
+      <a href="#steps">Setup</a>
+      <a href="#modes">Modes</a>
+      <a href="#sim">Simulator</a>
+      <a href="#fees">Fees</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="top__right">
+      <span class="live"><span class="dot-live"></span><b id="liveBots">0</b> birds live</span>
+      <a class="ico" data-link="x" href="#" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.8 3h3.1l-6.8 7.7L22 21h-6.2l-4.9-6.3L5.3 21H2.2l7.2-8.3L1.8 3h6.4l4.4 5.8L17.8 3Zm-1.1 16.2h1.7L7.4 4.7H5.6l11.1 14.5Z"/></svg></a>
+      <a class="ico" data-link="tg" href="#" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.9 4.3 18.7 19.5c-.2 1-.9 1.3-1.7.8l-4.8-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.9 8.9-8c.4-.3-.1-.5-.6-.2l-11 6.9-4.7-1.5c-1-.3-1-1 .2-1.5L20.6 3c.9-.3 1.6.2 1.3 1.3Z"/></svg></a>
+      <a class="btn btn--laser btn--sm" href="./app.html"><span>Launch app <b class="arr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5"/></svg></b></span></a>
+      <button class="burger" id="burger" aria-label="menu"><i></i><i></i><i></i></button>
+    </div>
+  </header>
+  <nav class="menu" id="menu" aria-label="menu">
+    <a href="#chart"><span>01</span>How it trades</a>
+    <a href="#steps"><span>02</span>Setup</a>
+    <a href="#modes"><span>03</span>Modes</a>
+    <a href="#sim"><span>04</span>Simulator</a>
+    <a href="#fees"><span>05</span>Fees</a>
+    <a href="#faq"><span>06</span>FAQ</a>
+  </nav>
+
+  <main>
+    <!-- 01 HERO -->
+    <section class="hero" id="hero" data-scene="hero">
+      <div class="hero__hud wrap">
+        <span class="eyebrow">market maker on solana</span>
+        <span class="eyebrow bare hide-sm"><span class="dot-live"></span>reading charts 24/7</span>
+      </div>
+      <h1 class="sr">BLACKCOCK</h1>
+      <div class="hero__foot wrap">
+        <p class="hero__lead">a market maker for your solana coin. your creator fees go in, it buys the dips and sells the tops.</p>
+        <div class="hero__cta">
+          <a class="btn btn--laser" href="./app.html"><span>Rent the bird <b class="arr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5"/></svg></b></span><i>1 SOL</i></a>
+          <a class="btn btn--ghost" href="#sim"><span>Watch it trade <b class="arr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5"/></svg></b></span></a>
+        </div>
+      </div>
+      <div class="ticker" aria-label="live stats">
+        <div class="ticker__track" id="ticker"></div>
+      </div>
+    </section>
+
+    <!-- 02 THE CHART: camera flies along the laser -->
+    <section class="chart" id="chart" data-scene="chart">
+      <div class="chart__pin">
+        <div class="chart__head wrap">
+          <span class="eyebrow">how it trades</span>
+          <div class="chart__count mono"><span id="chartStep">01</span> / 03</div>
+        </div>
+        <div class="chart__cards wrap">
+          <article class="beat" data-beat="0">
+            <span class="beat__no display">01</span>
+            <h2 class="display">it reads<br />every candle</h2>
+            <p>rsi, bollinger bands, how far it is off the top, how far off the bottom. every minute, on your pool, live.</p>
+          </article>
+          <article class="beat" data-beat="1">
+            <span class="beat__no display red">02</span>
+            <h2 class="display">red means<br /><span class="red">it bought</span></h2>
+            <p>when the chart bleeds it buys with the sol your fees sent it. bigger dip, bigger bite, capped so one buy never moves the price more than you allow.</p>
+          </article>
+          <article class="beat" data-beat="2">
+            <span class="beat__no display">03</span>
+            <h2 class="display">white means<br />it sold</h2>
+            <p>only when it's overbought, only above what it paid, and never more than a slice of the buyers already coming in. your chart doesn't eat a dump.</p>
+          </article>
+        </div>
+        <div class="chart__legend wrap">
+          <span><i class="lg lg--buy"></i>bot buy</span>
+          <span><i class="lg lg--sell"></i>bot sell</span>
+          <span><i class="lg lg--line"></i>price</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 SETUP: four horizontal slides -->
+    <section class="steps" id="steps" data-scene="steps">
+      <div class="steps__pin">
+        <div class="steps__head wrap">
+          <span class="eyebrow">setup <b>/</b> about two minutes</span>
+          <div class="steps__bar"><i id="stepsBar"></i></div>
+        </div>
+        <div class="steps__track" id="stepsTrack">
+          <article class="slide">
+            <div class="slide__txt">
+              <span class="slide__no">01</span>
+              <h3 class="display">paste<br />your coin</h3>
+              <p>drop the contract address. it finds the pool, pulls the last few hours of candles and shows you the coin before you pay anything.</p>
+            </div>
+            <div class="slide__ui">
+              <div class="mock">
+                <label class="eyebrow">contract address</label>
+                <div class="mock__input facet"><span class="mono">9cRCn9rGT8V2imeM2BaKs13yhMEais3ruM3rPvT<span class="red">pump</span></span><i class="caret"></i></div>
+                <div class="mock__coin">
+                  <div class="mock__pfp facet"></div>
+                  <div><b>YOUR COIN</b><span class="mono">mcap $412k · liq $38k · pumpswap</span></div>
+                  <span class="tag">found</span>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="slide">
+            <div class="slide__txt">
+              <span class="slide__no">02</span>
+              <h3 class="display">pay 1 sol,<br />get a wallet</h3>
+              <p>1 sol rents the bird for 30 days on that coin. it makes a fresh wallet just for this bot. you sign one transaction, that's the whole checkout.</p>
+            </div>
+            <div class="slide__ui">
+              <div class="mock">
+                <label class="eyebrow">bot wallet</label>
+                <div class="mock__input facet"><span class="mono">BcK7…r9Qm</span><span class="mock__copy mono">copy</span></div>
+                <div class="mock__rows mono">
+                  <div><span>rent</span><span>1.000 SOL</span></div>
+                  <div><span>runs until</span><span id="mockUntil">+30 days</span></div>
+                  <div><span>withdraws go to</span><span>your wallet only</span></div>
+                </div>
+              </div>
+            </div>
+          </article>
+          <article class="slide">
+            <div class="slide__txt">
+              <span class="slide__no">03</span>
+              <h3 class="display">send it<br /><span class="red">your fees</span></h3>
+              <p>on pump.fun, set the bot wallet as the receiver of your creator fees. anywhere else, send sol to the bot wallet whenever you want. everything that lands there is ammo.</p>
+            </div>
+            <div class="slide__ui">
+              <div class="mock mock--flow">
+                <div class="flow__node facet"><span class="eyebrow">creator fees</span><b class="mono">+0.84 SOL</b></div>
+                <div class="flow__beam"><i></i></div>
+                <div class="flow__node flow__node--bot facet"><span class="eyebrow">bot wallet</span><b class="mono">4.12 SOL</b></div>
+              </div>
+            </div>
+          </article>
+          <article class="slide">
+            <div class="slide__txt">
+              <span class="slide__no">04</span>
+              <h3 class="display">pick a mode,<br />hit start</h3>
+              <p>supply, atm or blackcock, and how often it trades from 1 to 5. change it live, pause it, pull your sol and tokens out whenever you want.</p>
+            </div>
+            <div class="slide__ui">
+              <div class="mock">
+                <label class="eyebrow">mode</label>
+                <div class="mock__modes">
+                  <span class="facet">supply</span><span class="facet">atm</span><span class="facet is-on">blackcock</span>
+                </div>
+                <label class="eyebrow">aggression</label>
+                <div class="mock__aggr"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></div>
+                <div class="mock__start facet"><span class="dot-live"></span> running · last: bought 0.31 SOL at the dip</div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 MODES -->
+    <section class="modes" id="modes" data-scene="modes">
+      <div class="wrap">
+        <div class="sec-head">
+          <span class="eyebrow">three ways to run it</span>
+          <h2 class="display">pick a <span class="red">temper</span></h2>
+        </div>
+        <div class="modes__grid" id="modesGrid">
+          <article class="mode facet" data-mode="supply">
+            <div class="mode__top"><span class="mode__idx mono">A</span><span class="tag">accumulate</span></div>
+            <h3 class="display">supply</h3>
+            <p>buys every real dip and barely sells. when it does, it's a blow-off top and only a sliver of the buyers. for soaking up supply at the bottom.</p>
+            <canvas class="mode__chart"></canvas>
+            <dl class="meters">
+              <div><dt>buys</dt><dd><i style="--v:.9"></i></dd></div>
+              <div><dt>sells</dt><dd><i style="--v:.15"></i></dd></div>
+              <div><dt>trades</dt><dd><i style="--v:.35"></i></dd></div>
+            </dl>
+          </article>
+          <article class="mode mode--hero facet is-open" data-mode="blackcock">
+            <div class="mode__bird" aria-hidden="true"></div>
+            <div class="mode__top"><span class="mode__idx mono">B</span><span class="tag">default</span></div>
+            <h3 class="display red">blackcock</h3>
+            <p>props the chart when it needs it and sells when it's overbought. keeps a healthy bag, takes profit on the way up. what most coins should run.</p>
+            <canvas class="mode__chart"></canvas>
+            <dl class="meters">
+              <div><dt>buys</dt><dd><i style="--v:.65"></i></dd></div>
+              <div><dt>sells</dt><dd><i style="--v:.5"></i></dd></div>
+              <div><dt>trades</dt><dd><i style="--v:.7"></i></dd></div>
+            </dl>
+          </article>
+          <article class="mode facet" data-mode="atm">
+            <div class="mode__top"><span class="mode__idx mono">C</span><span class="tag">print</span></div>
+            <h3 class="display">atm</h3>
+            <p>takes profit early and often and sends it straight to your wallet as it comes in. for devs who want their fees back as more sol.</p>
+            <canvas class="mode__chart"></canvas>
+            <dl class="meters">
+              <div><dt>buys</dt><dd><i style="--v:.55"></i></dd></div>
+              <div><dt>sells</dt><dd><i style="--v:.8"></i></dd></div>
+              <div><dt>to you</dt><dd><i style="--v:.95"></i></dd></div>
+            </dl>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 SIMULATOR -->
+    <section class="sim" id="sim" data-scene="sim">
+      <div class="wrap">
+        <div class="sec-head sec-head--row">
+          <div>
+            <span class="eyebrow">simulator <b>/</b> same code as the live bot</span>
+            <h2 class="display">watch it <span class="red">trade</span></h2>
+          </div>
+          <p class="sec-head__note">one made-up memecoin day, the same traders twice. grey is the chart without the bird, white is with it. switch modes, turn it up, roll a new day.</p>
+        </div>
+        <div class="simbox facet">
+          <div class="simbox__bar">
+            <div class="seg" id="simMode" role="tablist">
+              <button data-v="supply">supply</button>
+              <button data-v="blackcock" class="is-on">blackcock</button>
+              <button data-v="atm">atm</button>
+            </div>
+            <div class="aggr" id="simAggr" aria-label="aggression">
+              <span class="eyebrow">aggression</span>
+              <div class="aggr__steps"><button data-v="1"></button><button data-v="2"></button><button data-v="3" class="is-on"></button><button data-v="4"></button><button data-v="5"></button></div>
+              <b class="mono" id="simAggrV">3</b>
+            </div>
+            <button class="btn btn--ghost btn--sm" id="simRoll"><span>new day</span></button>
+          </div>
+          <div class="simbox__chart">
+            <canvas id="simCanvas"></canvas>
+            <div class="simbox__tip mono" id="simTip"></div>
+          </div>
+          <div class="simbox__stats" id="simStats"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 FEES + BURN -->
+    <section class="fees" id="fees" data-scene="fees">
+      <div class="wrap fees__grid">
+        <div class="fees__copy">
+          <span class="eyebrow">what it costs</span>
+          <h2 class="display">no profit,<br /><span class="red">no fee</span></h2>
+          <div class="fees__rows">
+            <div class="fee"><b class="display">1 SOL</b><p>rents the bird for 30 days, per coin. paid once up front, renew when it runs out or don't.</p></div>
+            <div class="fee"><b class="display red">10%</b><p>of the profit it makes buys $BLACKCOCK on the market and burns it. that's the only cut.</p></div>
+            <div class="fee"><b class="display">0</b><p>taken while it's down. if it gives profit back, it has to earn it back before anything is taken again.</p></div>
+          </div>
+          <div class="burn facet">
+            <span class="eyebrow"><span class="dot-live"></span>&nbsp; $BLACKCOCK burned so far</span>
+            <b class="display" id="burnCount">0</b>
+            <span class="mono burn__sub" id="burnSub">burn starts when the first bot books a profit</span>
+          </div>
+        </div>
+        <div class="fees__bird" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- 07 SAFETY -->
+    <section class="safety" id="safety" data-scene="safety">
+      <div class="wrap">
+        <div class="sec-head">
+          <span class="eyebrow">guardrails</span>
+          <h2 class="display">rules it <span class="red">can't</span> break</h2>
+        </div>
+        <div class="safety__grid">
+          <ol class="rules" id="rules"></ol>
+          <div class="yours facet">
+            <span class="eyebrow">what stays yours</span>
+            <ul>
+              <li><b>pause, switch modes, change limits</b> live, from the dashboard, no redeploy.</li>
+              <li><b>withdraw sol and tokens</b> any time. withdrawals only ever go to the wallet that paid the rent.</li>
+              <li><b>keys stay locked.</b> the bot wallet's key is encrypted on the server, never shown, never logged.</li>
+              <li><b>one wallet, real trades.</b> it never trades with itself and never fakes volume. every buy and sell is on chain against the pool.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 FAQ -->
+    <section class="faq" id="faq" data-scene="faq">
+      <div class="wrap faq__grid">
+        <div class="sec-head">
+          <span class="eyebrow">questions</span>
+          <h2 class="display">ask the<br /><span class="red">bird</span></h2>
+        </div>
+        <div class="faq__list" id="faqList"></div>
+      </div>
+    </section>
+
+    <!-- 09 END -->
+    <section class="end" id="end" data-scene="end">
+      <div class="end__inner wrap">
+        <span class="eyebrow">1 sol · 30 days · one coin</span>
+        <h2 class="display end__title">put the bird<br />on your <span class="red">chart</span></h2>
+        <div class="hero__cta">
+          <a class="btn btn--laser" href="./app.html"><span>Rent the bird <b class="arr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5"/></svg></b></span><i>1 SOL</i></a>
+          <a class="btn btn--ghost" href="./app.html?demo=1"><span>Open the demo <b class="arr"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 8h11M8.5 3.5 13 8l-4.5 4.5"/></svg></b></span></a>
+        </div>
+      </div>
+      <footer class="foot wrap">
+        <a class="brand" href="#hero"><img src="./art/mark-128.png" alt="" /><b>BLACK<em>COCK</em></b></a>
+        <span class="mono foot__ca">$BLACKCOCK <span id="caText">ca soon</span></span>
+        <span class="foot__legal">trading memecoins is risky and the bot can lose money. the simulator shows behaviour, not future returns.</span>
+      </footer>
+    </section>
+  </main>
+
+</body>
+</html>

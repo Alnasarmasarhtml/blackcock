@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>BLACKCOCK · app</title>
+  <meta name="theme-color" content="#050505" />
+  <link rel="icon" href="./art/mark-64.png" />
+  <script type="module" crossorigin src="./assets/app-Cq6QQAcs.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/config-DjUNr4bY.js">
+  <link rel="stylesheet" crossorigin href="./assets/config-hJORx516.css">
+  <link rel="stylesheet" crossorigin href="./assets/app-CKj-x4lJ.css">
+</head>
+<body class="app">
+  <div class="grain" aria-hidden="true"></div>
+  <div class="app-bg" aria-hidden="true"></div>
+
+  <header class="top">
+    <a class="brand" href="./index.html"><img src="./art/mark-128.png" alt="" /><b>BLACK<em>COCK</em></b></a>
+    <span class="top__div" aria-hidden="true"></span>
+    <nav class="nav app-nav" id="appNav">
+      <a href="#rent" data-view="rent" class="is-on"><span class="nl">Rent the bird</span><span class="ns">Rent</span></a>
+      <a href="#bots" data-view="bots"><span class="nl">My bots</span><span class="ns">Bots</span></a>
+    </nav>
+    <div class="top__right">
+      <span class="tag" id="netTag">demo</span>
+      <button class="btn btn--ghost btn--sm" id="walletBtn"><span>Connect wallet</span></button>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <!-- ================= RENT WIZARD ================= -->
+    <section class="view" id="view-rent">
+      <div class="wiz">
+        <aside class="wiz__rail">
+          <span class="eyebrow">rent the bird</span>
+          <h1 class="display wiz__title">four steps,<br /><span class="red">two minutes</span></h1>
+          <ol class="rail" id="rail">
+            <li data-step="0" class="is-on"><b>01</b><span>your coin</span></li>
+            <li data-step="1"><b>02</b><span>how it trades</span></li>
+            <li data-step="2"><b>03</b><span>pay 1 sol</span></li>
+            <li data-step="3"><b>04</b><span>send it fees</span></li>
+          </ol>
+          <div class="rail__note mono" id="railNote">nothing is charged until step 03.</div>
+        </aside>
+
+        <div class="wiz__body">
+          <!-- step 1 -->
+          <div class="step is-on" data-step="0">
+            <div class="step__head"><span class="step__no">01</span><h2 class="display">paste your coin</h2></div>
+            <p class="step__p">the contract address of the solana coin the bird should trade. it finds the pool and reads the chart.</p>
+            <form class="field facet" id="caForm" autocomplete="off">
+              <input id="caInput" class="mono" placeholder="contract address, e.g. 9cRC…pump" spellcheck="false" />
+              <button class="btn btn--laser btn--sm" type="submit"><span>Find it</span></button>
+            </form>
+            <div class="err mono" id="caErr"></div>
+            <div class="coin facet is-empty" id="coinCard">
+              <div class="coin__pfp facet" id="coinPfp"></div>
+              <div class="coin__id"><b id="coinName">—</b><span class="mono" id="coinSym">waiting for an address</span></div>
+              <dl class="coin__stats mono" id="coinStats"></dl>
+            </div>
+            <div class="step__foot">
+              <span></span>
+              <button class="btn btn--laser" id="next0" disabled><span>Next: how it trades</span></button>
+            </div>
+          </div>
+
+          <!-- step 2 -->
+          <div class="step" data-step="1">
+            <div class="step__head"><span class="step__no">02</span><h2 class="display">how it trades</h2></div>
+            <p class="step__p">pick a temper. you can change all of this later from the dashboard while it runs.</p>
+            <div class="pick" id="modePick">
+              <button class="pick__m facet" data-mode="supply"><span class="mono">A</span><b>supply</b><em>buys dips, barely sells. for soaking up supply.</em></button>
+              <button class="pick__m facet is-on" data-mode="blackcock"><span class="mono">B · default</span><b>blackcock</b><em>buys dips, sells overbought, keeps the chart healthy.</em></button>
+              <button class="pick__m facet" data-mode="atm"><span class="mono">C</span><b>atm</b><em>takes profit often and sends it to your wallet.</em></button>
+            </div>
+            <div class="row2">
+              <div class="aggr-box facet">
+                <div class="aggr-box__top"><span class="eyebrow">aggression</span><b class="display" id="aggrV">3</b></div>
+                <div class="aggr__steps aggr__steps--big" id="aggrPick"><button data-v="1"></button><button data-v="2"></button><button data-v="3"></button><button data-v="4"></button><button data-v="5"></button></div>
+                <p class="mono aggr-box__p" id="aggrP"></p>
+              </div>
+              <div class="preview facet">
+                <div class="preview__top"><span class="eyebrow">preview on a made-up day</span><span class="mono" id="prevStat"></span></div>
+                <canvas id="prevCanvas"></canvas>
+              </div>
+            </div>
+            <details class="adv" id="adv">
+              <summary><span class="eyebrow">limits</span><span class="mono">defaults are fine for most coins</span><i></i></summary>
+              <div class="adv__grid" id="limits"></div>
+            </details>
+            <div class="step__foot">
+              <button class="btn btn--ghost" data-back><span>Back</span></button>
+              <button class="btn btn--laser" id="next1"><span>Next: pay</span></button>
+            </div>
+          </div>
+
+          <!-- step 3 -->
+          <div class="step" data-step="2">
+            <div class="step__head"><span class="step__no">03</span><h2 class="display">pay <span class="red">1 sol</span></h2></div>
+            <p class="step__p">one transaction from your wallet. that wallet becomes the owner: the only place withdrawals can go.</p>
+            <div class="bill facet" id="bill"></div>
+            <div class="err mono" id="payErr"></div>
+            <div class="step__foot">
+              <button class="btn btn--ghost" data-back><span>Back</span></button>
+              <button class="btn btn--laser" id="payBtn"><span id="payLabel">Connect wallet</span><i>1 SOL</i></button>
+            </div>
+          </div>
+
+          <!-- step 4 -->
+          <div class="step" data-step="3">
+            <div class="step__head"><span class="step__no">04</span><h2 class="display">send it <span class="red">your fees</span></h2></div>
+            <p class="step__p">this is the bot's wallet. everything that lands here is ammo. it starts trading as soon as it sees sol.</p>
+            <div class="botwallet facet">
+              <span class="eyebrow">bot wallet</span>
+              <div class="botwallet__addr"><span class="mono" id="bwAddr">—</span><button class="btn btn--laser btn--sm" id="bwCopy"><span>Copy</span></button></div>
+              <div class="botwallet__state mono"><span class="dot-live"></span><span id="bwState">waiting for fuel</span></div>
+            </div>
+            <div class="howto" id="howTo"></div>
+            <div class="step__foot">
+              <span></span>
+              <button class="btn btn--laser" id="toDash"><span>Open the dashboard</span></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= DASHBOARD ================= -->
+    <section class="view" id="view-bots">
+      <div class="dash">
+        <aside class="dash__list">
+          <div class="dash__listhead"><span class="eyebrow">my bots</span><a class="mono" href="#rent" data-view="rent">+ rent</a></div>
+          <div id="botList"></div>
+        </aside>
+
+        <div class="dash__main" id="dashMain">
+          <div class="empty facet" id="dashEmpty">
+            <h2 class="display">no bird yet</h2>
+            <p>connect the wallet that paid the rent, or rent one. there's also a demo bot if you want to see it run first.</p>
+            <div class="hero__cta"><a class="btn btn--laser" href="#rent" data-view="rent"><span>Rent the bird</span><i>1 SOL</i></a><a class="btn btn--ghost" href="?demo=1#bots"><span>Run the demo</span></a></div>
+          </div>
+
+          <div class="bot" id="bot" hidden>
+            <div class="bot__head">
+              <div class="bot__id">
+                <div class="coin__pfp facet" id="bPfp"></div>
+                <div><h2 class="display" id="bName">—</h2><span class="mono" id="bSub">—</span></div>
+              </div>
+              <div class="bot__ctrl">
+                <span class="status mono" id="bStatus">—</span>
+                <button class="btn btn--ghost btn--sm" id="bToggle"><span>Pause</span></button>
+              </div>
+            </div>
+
+            <div class="tiles" id="tiles"></div>
+
+            <div class="bot__grid">
+              <div class="panel facet panel--chart">
+                <div class="panel__head"><span class="eyebrow">live chart <b>/</b> 1m</span><span class="mono" id="bPrice">—</span></div>
+                <div class="livechart"><canvas id="liveCanvas"></canvas><div class="simbox__tip mono" id="liveTip"></div></div>
+              </div>
+              <div class="panel facet panel--brain">
+                <div class="panel__head"><span class="eyebrow">what it's thinking</span><span class="mono" id="bAgo">—</span></div>
+                <div class="gauges">
+                  <div class="gauge" id="gDip"><svg viewBox="0 0 120 70"><path class="g-bg" d="M10 62 A50 50 0 0 1 110 62"/><path class="g-fg" d="M10 62 A50 50 0 0 1 110 62"/></svg><b class="display">0</b><span class="eyebrow">dip</span></div>
+                  <div class="gauge gauge--heat" id="gHeat"><svg viewBox="0 0 120 70"><path class="g-bg" d="M10 62 A50 50 0 0 1 110 62"/><path class="g-fg" d="M10 62 A50 50 0 0 1 110 62"/></svg><b class="display">0</b><span class="eyebrow">heat</span></div>
+                </div>
+                <div class="thought">
+                  <span class="thought__act display" id="tAct">hold</span>
+                  <p class="mono" id="tWhy">—</p>
+                </div>
+                <div class="brain__rsi mono" id="tRsi">rsi —</div>
+              </div>
+            </div>
+
+            <div class="bot__grid bot__grid--b">
+              <div class="panel facet">
+                <div class="panel__head"><span class="eyebrow">settings</span><span class="mono" id="setNote">changes apply on the next tick</span></div>
+                <div class="seg seg--wide" id="bMode"><button data-v="supply">supply</button><button data-v="blackcock">blackcock</button><button data-v="atm">atm</button></div>
+                <div class="aggr aggr--row"><span class="eyebrow">aggression</span><div class="aggr__steps" id="bAggr"><button data-v="1"></button><button data-v="2"></button><button data-v="3"></button><button data-v="4"></button><button data-v="5"></button></div><b class="mono" id="bAggrV">3</b></div>
+                <div class="adv__grid adv__grid--dash" id="bLimits"></div>
+                <button class="btn btn--laser btn--sm" id="bSave"><span>Save settings</span></button>
+              </div>
+              <div class="panel facet">
+                <div class="panel__head"><span class="eyebrow">wallet</span><span class="mono" id="bWallet">—</span></div>
+                <div class="wd">
+                  <p class="mono wd__p">withdrawals go to the owner wallet only. any fee owed is settled first.</p>
+                  <div class="wd__row"><button class="btn btn--ghost btn--sm" data-wd="sol"><span>Withdraw SOL</span></button><button class="btn btn--ghost btn--sm" data-wd="tokens"><span>Withdraw tokens</span></button><button class="btn btn--ghost btn--sm" data-wd="all"><span>Everything</span></button></div>
+                  <div class="wd__rent mono" id="bRent">—</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="panel facet">
+              <div class="panel__head"><span class="eyebrow">trades</span><span class="mono" id="tCount">—</span></div>
+              <div class="tbl-wrap"><table class="tbl mono"><thead><tr><th>time</th><th>side</th><th>sol</th><th>tokens</th><th>price</th><th>why</th><th></th></tr></thead><tbody id="tBody"></tbody></table></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast mono" id="toast"></div>
+</body>
+</html>
